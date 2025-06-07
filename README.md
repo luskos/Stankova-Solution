@@ -110,6 +110,6 @@ Geodesic simulation with solve_ivp
 
 License: Open for public and research use under MIT License.
 
-Author: [Your Name or Alias]Date: [Insert Date]Contact: [GitHub/Twitter/Email if desired]
+Author: [Lyudmil Yozov]Date: [06/07/2025]
 
 "To curve space with symbols and symmetry is to discover the physics already embedded in beauty."
