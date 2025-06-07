@@ -2,7 +2,7 @@
 Title: A Vacuum-Admissible Analytic Surface Mimicking Gravitational Behavior via Adapted Yin-Yang Geometry
 
 Summary:
-This document presents an original analytic surface inspired by the Yin-Yang symbol, shown to locally satisfy the vacuum Einstein field equations in 2D analog. The surface curvature, geodesic trajectories, and Christoffel symbols were derived and validated numerically. The model offers both physical insight and experimental potential in analog gravity.
+This document presents an original analytic surface inspired by the Yin-Yang symbol, shown to locally satisfy the vacuum Einstein field equations in 2D analog. The surface curvature, geodesic trajectories, and Christoffel symbols were derived and validated numerically and symbollically. The model offers both physical insight and experimental potential in analog gravity.
 
 1. Geometry Definition
 
