@@ -1,0 +1,763 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     27393,        755]
+NotebookOptionsPosition[     26098,        728]
+NotebookOutlinePosition[     26521,        744]
+CellTagsIndexPosition[     26478,        741]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"===", "PARAMETERS", "==="}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"R0", "=", "1.0"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"A", "=", "1.0"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"w", "=", "10.0"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Epsilon]", "=", "0.01"}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"SAFE", " ", "POTENTIAL"}], "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Phi]Safe", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "r", "}"}], ",", 
+       RowBox[{
+        RowBox[{"r", "=", 
+         RowBox[{"Max", "[", 
+          RowBox[{
+           RowBox[{"Sqrt", "[", 
+            RowBox[{
+             RowBox[{"x", "^", "2"}], "+", 
+             RowBox[{"y", "^", "2"}]}], "]"}], ",", "\[Epsilon]"}], "]"}]}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"Max", "[", 
+         RowBox[{
+          RowBox[{"A", "*", 
+           RowBox[{"(", 
+            RowBox[{"1", "-", 
+             RowBox[{"R0", "/", "r"}]}], ")"}], "*", 
+           RowBox[{"Exp", "[", 
+            RowBox[{"-", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"r", "-", "R0"}], ")"}], "^", "2"}], "/", 
+               RowBox[{"w", "^", "2"}]}], ")"}]}], "]"}]}], ",", 
+          RowBox[{"10", "^", 
+           RowBox[{"-", "15"}]}]}], "]"}]}]}], "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"METRIC", " ", "AND", " ", "INVERSE", " ", "METRIC"}], "==="}], 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"metricVal", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "f", "}"}], ",", 
+       RowBox[{
+        RowBox[{"f", "=", 
+         RowBox[{"Exp", "[", 
+          RowBox[{"2", " ", 
+           RowBox[{"\[Phi]Safe", "[", 
+            RowBox[{"x", ",", "y"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "f"}], ",", "0", ",", "0"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", 
+            RowBox[{"1", "/", "f"}], ",", "0"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", 
+            RowBox[{"1", "/", "f"}]}], "}"}]}], "}"}]}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"invMetricVal", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "f", "}"}], ",", 
+       RowBox[{
+        RowBox[{"f", "=", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"-", "2"}], " ", 
+           RowBox[{"\[Phi]Safe", "[", 
+            RowBox[{"x", ",", "y"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "f"}], ",", "0", ",", "0"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "f", ",", "0"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "0", ",", "f"}], "}"}]}], "}"}]}]}], "]"}]}], 
+    ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"NUMERICAL", " ", "DERIVATIVE"}], "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"deriv", "[", 
+      RowBox[{"f_", ",", "x0_", ",", "y0_", ",", "var_", ",", 
+       RowBox[{"h_", ":", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "4"}]}]}]}], "]"}], ":=", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"var", "==", "1"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"f", "[", 
+           RowBox[{
+            RowBox[{"x0", "+", "h"}], ",", "y0"}], "]"}], "-", 
+          RowBox[{"f", "[", 
+           RowBox[{
+            RowBox[{"x0", "-", "h"}], ",", "y0"}], "]"}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"2", " ", "h"}], ")"}]}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"f", "[", 
+           RowBox[{"x0", ",", 
+            RowBox[{"y0", "+", "h"}]}], "]"}], "-", 
+          RowBox[{"f", "[", 
+           RowBox[{"x0", ",", 
+            RowBox[{"y0", "-", "h"}]}], "]"}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"2", " ", "h"}], ")"}]}]}], "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"CHRISTOFFEL", " ", "SYMBOL"}], "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Christoffel", "[", 
+      RowBox[{"x_", ",", "y_", ",", "mu_", ",", "nu_", ",", "rho_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g", ",", "ig"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"g", "=", 
+         RowBox[{"metricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", 
+        RowBox[{"ig", "=", 
+         RowBox[{"invMetricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"1", "/", "2"}], " ", 
+           RowBox[{"ig", "[", 
+            RowBox[{"[", 
+             RowBox[{"mu", ",", "sigma"}], "]"}], "]"}], "*", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"deriv", "[", 
+              RowBox[{
+               RowBox[{"Function", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"a", ",", "b"}], "}"}], ",", 
+                 RowBox[{"g", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"sigma", ",", "nu"}], "]"}], "]"}]}], "]"}], ",", 
+               "x", ",", "y", ",", "rho"}], "]"}], "+", 
+             RowBox[{"deriv", "[", 
+              RowBox[{
+               RowBox[{"Function", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"a", ",", "b"}], "}"}], ",", 
+                 RowBox[{"g", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"sigma", ",", "rho"}], "]"}], "]"}]}], "]"}], ",", 
+               "x", ",", "y", ",", "nu"}], "]"}], "-", 
+             RowBox[{"deriv", "[", 
+              RowBox[{
+               RowBox[{"Function", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"a", ",", "b"}], "}"}], ",", 
+                 RowBox[{"g", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"nu", ",", "rho"}], "]"}], "]"}]}], "]"}], ",", 
+               "x", ",", "y", ",", "sigma"}], "]"}]}], ")"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"sigma", ",", "1", ",", "3"}], "}"}]}], "]"}]}]}], "]"}]}],
+     ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"RICCI", " ", "TENSOR"}], "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Ricci", "[", 
+      RowBox[{"x_", ",", "y_", ",", "mu_", ",", "nu_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"sum", "=", "0"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"sum", "=", 
+         RowBox[{"Sum", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"deriv", "[", 
+             RowBox[{
+              RowBox[{"Function", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"a", ",", "b"}], "}"}], ",", 
+                RowBox[{"Christoffel", "[", 
+                 RowBox[{
+                 "a", ",", "b", ",", "sigma", ",", "mu", ",", "sigma"}], 
+                 "]"}]}], "]"}], ",", "x", ",", "y", ",", "nu"}], "]"}], "-", 
+            RowBox[{"deriv", "[", 
+             RowBox[{
+              RowBox[{"Function", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"a", ",", "b"}], "}"}], ",", 
+                RowBox[{"Christoffel", "[", 
+                 RowBox[{"a", ",", "b", ",", "sigma", ",", "mu", ",", "nu"}], 
+                 "]"}]}], "]"}], ",", "x", ",", "y", ",", "sigma"}], "]"}], "+", 
+            RowBox[{"Sum", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Christoffel", "[", 
+                 RowBox[{
+                 "x", ",", "y", ",", "sigma", ",", "kappa", ",", "nu"}], 
+                 "]"}], "*", 
+                RowBox[{"Christoffel", "[", 
+                 RowBox[{
+                 "x", ",", "y", ",", "kappa", ",", "mu", ",", "sigma"}], 
+                 "]"}]}], "-", 
+               RowBox[{
+                RowBox[{"Christoffel", "[", 
+                 RowBox[{
+                 "x", ",", "y", ",", "sigma", ",", "kappa", ",", "sigma"}], 
+                 "]"}], "*", 
+                RowBox[{"Christoffel", "[", 
+                 RowBox[{"x", ",", "y", ",", "kappa", ",", "mu", ",", "nu"}], 
+                 "]"}]}]}], ",", 
+              RowBox[{"{", 
+               RowBox[{"kappa", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"sigma", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", "sum"}]}], "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"STRESS", " ", "ENERGY", " ", "TENSOR"}], "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"stressEnergy", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g", ",", "ig", ",", "R", ",", "RicciScalar"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"g", "=", 
+         RowBox[{"metricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"ig", "=", 
+         RowBox[{"invMetricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"R", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Ricci", "[", 
+            RowBox[{"x", ",", "y", ",", "mu", ",", "nu"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"mu", ",", "1", ",", "3"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"nu", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"RicciScalar", "=", 
+         RowBox[{"Tr", "[", 
+          RowBox[{"ig", ".", "R"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", "/", 
+             RowBox[{"(", 
+              RowBox[{"8", " ", "Pi"}], ")"}]}], ")"}], "*", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"R", "[", 
+              RowBox[{"[", 
+               RowBox[{"mu", ",", "nu"}], "]"}], "]"}], "-", 
+             RowBox[{
+              RowBox[{"1", "/", "2"}], " ", 
+              RowBox[{"g", "[", 
+               RowBox[{"[", 
+                RowBox[{"mu", ",", "nu"}], "]"}], "]"}], "*", 
+              "RicciScalar"}]}], ")"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"mu", ",", "1", ",", "3"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"nu", ",", "1", ",", "3"}], "}"}]}], "]"}]}]}], "]"}]}], 
+    ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"SAFE", " ", "DIVISION", " ", "ENERGY", " ", "DENSITY"}], 
+     "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"safeDivide", "[", 
+      RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Abs", "[", "b", "]"}], "<", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "14"}]}]}], ",", "0", ",", 
+       RowBox[{"a", "/", "b"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"energyDensity", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g", ",", "ig", ",", "R"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"g", "=", 
+         RowBox[{"metricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", 
+        RowBox[{"ig", "=", 
+         RowBox[{"invMetricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"R", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Ricci", "[", 
+            RowBox[{"x", ",", "y", ",", "mu", ",", "nu"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"mu", ",", "1", ",", "3"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"nu", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"safeDivide", "[", 
+         RowBox[{
+          RowBox[{"-", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"R", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ",", "1"}], "]"}], "]"}], "-", 
+             RowBox[{
+              RowBox[{"1", "/", "2"}], " ", 
+              RowBox[{"g", "[", 
+               RowBox[{"[", 
+                RowBox[{"1", ",", "1"}], "]"}], "]"}], " ", 
+              RowBox[{"Tr", "[", 
+               RowBox[{"ig", ".", "R"}], "]"}]}]}], ")"}]}], ",", 
+          RowBox[{"g", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "]"}]}]}], "]"}]}], 
+    ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", "NEC", "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"nullVec", "=", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "1", ",", "0"}], "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NEC", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"g", ",", "ig", ",", "R", ",", "T"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"g", "=", 
+         RowBox[{"metricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", 
+        RowBox[{"ig", "=", 
+         RowBox[{"invMetricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"R", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Ricci", "[", 
+            RowBox[{"x", ",", "y", ",", "mu", ",", "nu"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"mu", ",", "1", ",", "3"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"nu", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"T", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"R", "[", 
+             RowBox[{"[", 
+              RowBox[{"mu", ",", "nu"}], "]"}], "]"}], "-", 
+            RowBox[{
+             RowBox[{"1", "/", "2"}], " ", 
+             RowBox[{"g", "[", 
+              RowBox[{"[", 
+               RowBox[{"mu", ",", "nu"}], "]"}], "]"}], " ", 
+             RowBox[{"Tr", "[", 
+              RowBox[{"ig", ".", "R"}], "]"}]}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"mu", ",", "1", ",", "3"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"nu", ",", "1", ",", "3"}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Chop", "[", 
+         RowBox[{"nullVec", ".", "T", ".", "nullVec"}], "]"}]}]}], "]"}]}], 
+    ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", "WEC", "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"timelikeVec", "=", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0", ",", "0"}], "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"WEC", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "T", "}"}], ",", 
+       RowBox[{
+        RowBox[{"T", "=", 
+         RowBox[{"stressEnergy", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"Chop", "[", 
+         RowBox[{"timelikeVec", ".", "T", ".", "timelikeVec"}], "]"}]}]}], 
+      "]"}]}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", "DEC", "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"DEC", "[", 
+      RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"T", ",", "flowVec", ",", "norm", ",", "g"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"T", "=", 
+         RowBox[{"stressEnergy", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"g", "=", 
+         RowBox[{"metricVal", "[", 
+          RowBox[{"x", ",", "y"}], "]"}]}], ";", 
+        RowBox[{"flowVec", "=", 
+         RowBox[{"T", ".", "timelikeVec"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"norm", "=", 
+         RowBox[{"flowVec", ".", "g", ".", "flowVec"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"WEC", "[", 
+             RowBox[{"x", ",", "y"}], "]"}], ">=", "0"}], "&&", 
+           RowBox[{"norm", "<=", "0"}]}], ",", "True", ",", "False"}], 
+         "]"}]}]}], "]"}]}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"INTEGRAND", " ", "FOR", " ", "EXOTIC", " ", "ENERGY"}], "==="}],
+     "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"polarIntegrand", "[", 
+      RowBox[{"r_", "?", "NumericQ"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "g", "}"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"r", "<", "\[Epsilon]"}], ",", "0", ",", 
+         RowBox[{
+          RowBox[{"g", "=", 
+           RowBox[{"metricVal", "[", 
+            RowBox[{"r", ",", "0"}], "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"r", "*", 
+           RowBox[{"energyDensity", "[", 
+            RowBox[{"r", ",", "0"}], "]"}], "*", 
+           RowBox[{"Sqrt", "[", 
+            RowBox[{"Abs", "[", 
+             RowBox[{"-", 
+              RowBox[{"Det", "[", "g", "]"}]}], "]"}], "]"}]}]}]}], "]"}]}], 
+      "]"}]}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", 
+     RowBox[{"TOTAL", " ", "EXOTIC", " ", "ENERGY"}], "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"totalExoticEnergy", ":=", 
+     RowBox[{"NIntegrate", "[", 
+      RowBox[{
+       RowBox[{"polarIntegrand", "[", "r", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"r", ",", "\[Epsilon]", ",", "5"}], "}"}], ",", 
+       RowBox[{"Method", "->", 
+        RowBox[{"{", 
+         RowBox[{"\"\<GlobalAdaptive\>\"", ",", 
+          
+          RowBox[{"\"\<SingularityHandler\>\"", 
+           "->", "\"\<DoubleExponential\>\""}]}], "}"}]}], ",", 
+       RowBox[{"AccuracyGoal", "->", "4"}], ",", 
+       RowBox[{"PrecisionGoal", "->", "4"}]}], "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", "OUTPUT", "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Central Energy Density: \>\"", ",", 
+      RowBox[{"energyDensity", "[", 
+       RowBox[{"\[Epsilon]", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<NEC at (0,0): \>\"", ",", 
+      RowBox[{"NEC", "[", 
+       RowBox[{"\[Epsilon]", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<NEC at (1,0): \>\"", ",", 
+      RowBox[{"NEC", "[", 
+       RowBox[{"1.0", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<WEC at (0,0): \>\"", ",", 
+      RowBox[{"WEC", "[", 
+       RowBox[{"\[Epsilon]", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<WEC at (1,0): \>\"", ",", 
+      RowBox[{"WEC", "[", 
+       RowBox[{"1.0", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<DEC at (0,0): \>\"", ",", 
+      RowBox[{"DEC", "[", 
+       RowBox[{"\[Epsilon]", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<DEC at (1,0): \>\"", ",", 
+      RowBox[{"DEC", "[", 
+       RowBox[{"1.0", ",", "0.0"}], "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Total Exotic Energy: \>\"", ",", "totalExoticEnergy"}], 
+     "]"}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"===", "VISUALIZATION", "==="}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"energyDensity", "[", 
+       RowBox[{"r", ",", "0"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"r", ",", "\[Epsilon]", ",", "5"}], "}"}], ",", 
+      RowBox[{"PlotLabel", "->", "\"\<Energy Density Profile\>\""}], ",", 
+      RowBox[{"AxesLabel", "->", 
+       RowBox[{"{", 
+        RowBox[{"\"\<r\>\"", ",", "\"\<\[Rho](r)\>\""}], "}"}]}]}], "]"}], 
+    ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"WEC", "[", 
+       RowBox[{"r", ",", "0"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"r", ",", "\[Epsilon]", ",", "5"}], "}"}], ",", 
+      RowBox[{"PlotLabel", "->", "\"\<Weak Energy Condition (WEC)\>\""}], ",", 
+      RowBox[{"AxesLabel", "->", 
+       RowBox[{"{", 
+        RowBox[{"\"\<r\>\"", ",", "\"\<T_{00}\>\""}], "}"}]}]}], "]"}], ";"}],
+    "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"DEC", "[", 
+         RowBox[{"r", ",", "0"}], "]"}], ",", "1", ",", "0"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"r", ",", "\[Epsilon]", ",", "5"}], "}"}], ",", 
+      RowBox[{
+      "PlotLabel", 
+       "->", "\"\<Dominant Energy Condition (1=True, 0=False)\>\""}], ",", 
+      RowBox[{"AxesLabel", "->", 
+       RowBox[{"{", 
+        RowBox[{"\"\<r\>\"", ",", "\"\<DEC satisfied\>\""}], "}"}]}]}], "]"}],
+     ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<\\nStress-energy tensor at (0,0):\>\"", "]"}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"stressEnergy", "[", 
+      RowBox[{"\[Epsilon]", ",", "0.0"}], "]"}], "]"}], ";"}], 
+   "\n"}]}]], "Input",
+ CellChangeTimes->{{3.958402325683298*^9, 3.958402325683298*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"e4200268-d1d9-a548-97da-aee0049d0c4f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Central Energy Density: \"\>", "\[InvisibleSpace]", "0"}],
+  SequenceForm["Central Energy Density: ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9584023297434273`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"4b303fdd-9ce4-b54b-8ce1-6fa33652c018"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"NEC at (0,0): \"\>", "\[InvisibleSpace]", "0"}],
+  SequenceForm["NEC at (0,0): ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9584023297854347`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"fca5c885-65c8-1c41-9ba6-2cc2e3db70cd"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"NEC at (1,0): \"\>", "\[InvisibleSpace]", "0"}],
+  SequenceForm["NEC at (1,0): ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9584023298324566`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"81cbf36e-b665-c440-acb6-f714307d25ca"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"WEC at (0,0): \"\>", "\[InvisibleSpace]", "0"}],
+  SequenceForm["WEC at (0,0): ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.958402329870428*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"623d1922-6899-2546-b1a5-64aceb4c67cf"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"WEC at (1,0): \"\>", "\[InvisibleSpace]", "0"}],
+  SequenceForm["WEC at (1,0): ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9584023299094734`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"1e62ab9f-9bdc-264c-8211-b67950a27e89"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"DEC at (0,0): \"\>", "\[InvisibleSpace]", "True"}],
+  SequenceForm["DEC at (0,0): ", True],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.958402329983427*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"e9d5c35e-cd67-6942-bc30-856dbbc16295"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"DEC at (1,0): \"\>", "\[InvisibleSpace]", "True"}],
+  SequenceForm["DEC at (1,0): ", True],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9584023300564785`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"da9d4567-a30b-aa47-b0f9-70fc7bbc911d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Total Exotic Energy: \"\>", "\[InvisibleSpace]", "0.`"}],
+  SequenceForm["Total Exotic Energy: ", 0.],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.958402330680994*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"6e59044e-eb8e-6143-a1ca-2ec721850323"],
+
+Cell[BoxData["\<\"\\nStress-energy tensor at (0,0):\"\>"], "Print",
+ CellChangeTimes->{3.9584023404873657`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"6fd3ca4b-a82c-3341-adfe-58de7f2569db"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{571.8, 524.4},
+WindowMargins->{{256.8, Automatic}, {20.399999999999977`, Automatic}},
+FrontEndVersion->"14.2 for Microsoft Windows (64-bit) (March 14, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"2ef2bf54-9ad7-2546-8a32-c6fcb03b685d"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 22691, 614, 2349, "Input",ExpressionUUID->"e4200268-d1d9-a548-97da-aee0049d0c4f"],
+Cell[CellGroupData[{
+Cell[23292, 640, 332, 8, 22, "Print",ExpressionUUID->"4b303fdd-9ce4-b54b-8ce1-6fa33652c018"],
+Cell[23627, 650, 312, 8, 22, "Print",ExpressionUUID->"fca5c885-65c8-1c41-9ba6-2cc2e3db70cd"],
+Cell[23942, 660, 312, 8, 22, "Print",ExpressionUUID->"81cbf36e-b665-c440-acb6-f714307d25ca"],
+Cell[24257, 670, 310, 8, 22, "Print",ExpressionUUID->"623d1922-6899-2546-b1a5-64aceb4c67cf"],
+Cell[24570, 680, 312, 8, 22, "Print",ExpressionUUID->"1e62ab9f-9bdc-264c-8211-b67950a27e89"],
+Cell[24885, 690, 316, 8, 22, "Print",ExpressionUUID->"e9d5c35e-cd67-6942-bc30-856dbbc16295"],
+Cell[25204, 700, 318, 8, 22, "Print",ExpressionUUID->"da9d4567-a30b-aa47-b0f9-70fc7bbc911d"],
+Cell[25525, 710, 327, 8, 22, "Print",ExpressionUUID->"6e59044e-eb8e-6143-a1ca-2ec721850323"],
+Cell[25855, 720, 215, 4, 39, "Print",ExpressionUUID->"6fd3ca4b-a82c-3341-adfe-58de7f2569db"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
